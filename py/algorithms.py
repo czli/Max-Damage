@@ -142,16 +142,11 @@ def ap_genrules(frequent_itemsets, rules, f, H):
 	k = len(f)
 	m = len(H)
 
-	if k > m+1:
-		candidates = generate_candidates(H, k)
-		i = 0
-		while i < len(candidates):
+	if m > 2:
+		for subset in set(itertools.combination(H,m-1))
 			# for rule X -> Y - X: confidence = support(Y) / support(Y - X)
 			# frequencies can be used because of the division operation.
-			confidence = frequency(f) / frequency(f - candidates[i])
+			confidence = frequency(f) / frequency(f - subset)
 			if confidence >= minConfidence:
-				rules.apend( (f, f - candidates[i], confidence) )
-				i = i + 1
-			else:
-				del candidates[i]
-		ap_genrules(frequent_itemsets, rules, f, candidates)
+				rules.apend( (subset, f - subset, confidence) )
+				ap_genrules(frequent_itemsets,rules,f,subset)
